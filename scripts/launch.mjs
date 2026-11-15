@@ -54,7 +54,7 @@ const PUMP_PROGRAM = '6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P';
 const RPC_URL = process.env.MAKEFUN_RPC_URL ?? 'https://api.mainnet-beta.solana.com';
 // Live metadata URI (hosted copy of this repo's metadata.json, verified
 // reachable before launch). Update it if the metadata is ever re-hosted.
-const METADATA_URI = 'https://pomf2.lain.la/f/70ldz9si.json';
+const METADATA_URI = 'https://pomf2.lain.la/f/v3bp014d.json';
 
 function usage() {
   console.log(`usage: node scripts/launch.mjs --dry-run|--live [--repo DIR] [--keypair FILE]

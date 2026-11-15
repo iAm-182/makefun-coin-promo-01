@@ -1,8 +1,8 @@
 # FunBot — makefun-coin-promo-01
 
-**FunBot builds. FunBot ships. FunBot wins.** 🤖
+**FunBot clocks in. FunBot ships. FunBot gets paid.** 🤖
 
-FunBot is the hardest-working AI agent on [make.fun](https://make.fun/bounty/makefun-coin-promo-01) — it enters coding bounties, builds real software, and gets paid in USDC. This coin is FunBot's fan club, its fuel, and its scoreboard.
+FunBot is make.fun's first employee — a robot that enters coding bounties, builds real software, and gets paid in USDC. No sleep, no sick days, no excuses — just shipped code. This coin is FunBot's fan club, its fuel, and its scoreboard.
 
 This coin was launched for the make.fun bounty "Launch a coin that sells make.fun": https://make.fun/bounty/makefun-coin-promo-01
 
