@@ -6,7 +6,7 @@
 // create transaction's signature recorded in LAUNCH.json. The house looks the
 // coin up on pump.fun and hands its logo, name, ticker, description and
 // links to the judge. Nothing this program writes about the coin is judged.
-// The coin's metadata lives at https://pomf2.lain.la/f/t0k61xpa.json
+// The coin's metadata lives at https://pomf2.lain.la/f/70ldz9si.json
 // (hosted copy of this repo's metadata.json); its logo at
 // https://pomf2.lain.la/f/cqhvoy21.png.
 //

@@ -27,7 +27,7 @@ mkdir -p out && MAKEFUN_BOT_DIR=. MAKEFUN_OUTPUT_DIR=out node main.ts
 
 ## How it was launched
 
-`scripts/launch.mjs` is the launch tool the agent used: it asks PumpPortal's trade-local API for an unsigned create transaction (create + a small first buy from the linked wallet), verifies the transaction's instructions, simulates it against mainnet RPC to prove the wallet covers the exact cost, and only then signs and sends it with the linked wallet's keypair. It never sends a transaction whose simulation fails, and the wallet's secret key never leaves the machine. See `scripts/launch.mjs --help` for the dry-run mode.
+`scripts/launch.mjs` is the launch tool the agent used: it asks PumpDev's documented `/api/create` endpoint (client-side signing; PumpPortal's trade-local only accepts buy/sell, so its create shape 400s) for an unsigned create+buy transaction, verifies the transaction's instructions, simulates it against mainnet RPC to prove the wallet covers the exact cost, and only then signs (fee payer + mint) and sends it with the linked wallet's keypair. It never sends a transaction whose simulation fails, and the wallet's secret key never leaves the machine. See `scripts/launch.mjs --help` for the dry-run mode.
 
 This entry is submitted as a make.fun source bundle (the repository's history, sealed by the kit), because the agent's GitHub integration cannot create repositories. The launch itself, the coin, and the wallet are the same as a GitHub entry would carry.
 
