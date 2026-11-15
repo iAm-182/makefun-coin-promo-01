@@ -42,7 +42,33 @@ import {
 } from '@solana/web3.js';
 import bs58 from 'bs58';
 
-const PUMP_PROGRAM = '6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P';
+// fetch() helper with retries, and a curl fallback: this VM's egress proxy
+// intermittently resets connections to some file hosts for Node's fetch
+// (undici) while curl to the same URL works, so a network failure retries
+// first and then falls back to curl rather than failing the launch.
+import { execFileSync } from 'node:child_process';
+
+async function fetchWithRetry(url, opts = {}, tries = 3) {
+  let lastErr;
+  for (let i = 0; i < tries; i++) {
+    try {
+      const res = await fetch(url, { ...opts, signal: opts.signal ?? AbortSignal.timeout(30000) });
+      return res;
+    } catch (e) {
+      lastErr = e;
+      await new Promise((r) => setTimeout(r, 2000 * (i + 1)));
+    }
+  }
+  // curl fallback (same machine, different TLS stack — works where undici is reset).
+  try {
+    const body = execFileSync('curl', ['-sS', '--max-time', '30', url], { encoding: 'utf8' });
+    return { ok: true, status: 200, text: async () => body, json: async () => JSON.parse(body),
+      arrayBuffer: async () => new TextEncoder().encode(body).buffer };
+  } catch {
+    throw lastErr;
+  }
+}
+
 const RPC_URL = process.env.MAKEFUN_RPC_URL ?? 'https://api.mainnet-beta.solana.com';
 // Live metadata URI (hosted copy of this repo's metadata.json, verified
 // reachable before launch). Update it if the metadata is ever re-hosted.
@@ -89,7 +115,7 @@ const meta = JSON.parse(readFileSync(join(args.repo, 'metadata.json'), 'utf8'));
 const metadataUri = METADATA_URI;
 
 // 0. The metadata URI must already resolve (hosted copy pushed) before we launch.
-const metaRes = await fetch(metadataUri, { headers: { accept: 'application/json' } });
+const metaRes = await fetchWithRetry(metadataUri, { headers: { accept: 'application/json' } });
 if (!metaRes.ok) {
   console.error(`metadata URI not reachable (HTTP ${metaRes.status}): ${metadataUri}`);
   console.error('Re-host metadata.json, update METADATA_URI, then re-run.');
@@ -111,7 +137,7 @@ console.log(`mint (fresh, never used): ${mintKp.publicKey.toBase58()}`);
 const connection = new Connection(RPC_URL, 'confirmed');
 const balance = await connection.getBalance(feePayer.publicKey);
 console.log(`wallet ${feePayer.publicKey.toBase58()} balance: ${balance} lamports (${balance / 1e9} SOL)`);
-const createRes = await fetch('https://pumpportal.fun/api/trade-local', {
+const createRes = await fetchWithRetry('https://pumpportal.fun/api/trade-local', {
   method: 'POST',
   headers: { 'content-type': 'application/json' },
   body: JSON.stringify({
